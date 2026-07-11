@@ -1,0 +1,255 @@
+/* ==========================================================================
+   Adorable Client Portal — Sidebar
+   ========================================================================== */
+
+.acp-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--acp-sidebar-w);
+  background: var(--acp-navy);
+  display: flex;
+  flex-direction: column;
+  z-index: var(--acp-z-sidebar);
+  transition: width var(--acp-t-slow) var(--acp-ease), transform var(--acp-t-slow) var(--acp-ease);
+  overflow: hidden;
+}
+
+/* ── Brand ─────────────────────────────────────────────────────────────────── */
+.acp-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--acp-sp-3);
+  padding: 0 var(--acp-sp-5);
+  height: var(--acp-topbar-h);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.acp-sidebar__logo {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--acp-r-lg);
+  object-fit: contain;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+  padding: 4px;
+}
+
+.acp-sidebar__logo-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--acp-r-lg);
+  background: linear-gradient(135deg, var(--acp-gold), var(--acp-gold-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--acp-fs-lg);
+  font-weight: var(--acp-fw-bold);
+  color: #fff;
+}
+
+.acp-sidebar__brand-text {
+  overflow: hidden;
+  transition: opacity var(--acp-t-base) var(--acp-ease), width var(--acp-t-slow) var(--acp-ease);
+}
+
+.acp-sidebar__brand-name {
+  display: block;
+  font-size: var(--acp-fs-md);
+  font-weight: var(--acp-fw-bold);
+  color: #fff;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.acp-sidebar__brand-tagline {
+  display: block;
+  font-size: var(--acp-fs-xs);
+  color: rgba(255,255,255,0.45);
+  white-space: nowrap;
+  margin-top: 1px;
+}
+
+/* ── Navigation ────────────────────────────────────────────────────────────── */
+.acp-sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--acp-sp-4) 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.acp-sidebar__nav::-webkit-scrollbar { width: 4px; }
+.acp-sidebar__nav::-webkit-scrollbar-track { background: transparent; }
+.acp-sidebar__nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+.acp-sidebar__section {
+  margin-bottom: var(--acp-sp-2);
+}
+
+.acp-sidebar__section-label {
+  display: block;
+  padding: var(--acp-sp-2) var(--acp-sp-5);
+  font-size: 0.625rem;
+  font-weight: var(--acp-fw-semibold);
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity var(--acp-t-base) var(--acp-ease);
+}
+
+.acp-sidebar__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.acp-sidebar__item {
+  margin: 1px var(--acp-sp-3);
+}
+
+.acp-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: var(--acp-sp-3);
+  padding: 0.625rem var(--acp-sp-3);
+  border-radius: var(--acp-r-lg);
+  text-decoration: none;
+  color: rgba(255,255,255,0.65);
+  font-size: var(--acp-fs-sm);
+  font-weight: var(--acp-fw-medium);
+  white-space: nowrap;
+  transition:
+    background var(--acp-t-fast) var(--acp-ease),
+    color var(--acp-t-fast) var(--acp-ease);
+  position: relative;
+}
+
+.acp-sidebar__link:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.acp-sidebar__link--active {
+  background: rgba(200,169,106,0.18);
+  color: var(--acp-gold-light);
+}
+
+.acp-sidebar__link--active::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: var(--acp-gold);
+  border-radius: 0 2px 2px 0;
+}
+
+.acp-sidebar__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.acp-sidebar__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.acp-sidebar__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity var(--acp-t-base) var(--acp-ease);
+}
+
+/* ── Footer ────────────────────────────────────────────────────────────────── */
+.acp-sidebar__footer {
+  padding: var(--acp-sp-4) var(--acp-sp-5);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+.acp-sidebar__version {
+  display: flex;
+  align-items: center;
+  gap: var(--acp-sp-2);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.acp-sidebar__version-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--acp-success);
+  flex-shrink: 0;
+}
+
+.acp-sidebar__version-text {
+  font-size: var(--acp-fs-xs);
+  color: rgba(255,255,255,0.3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Collapsed State ───────────────────────────────────────────────────────── */
+.acp-sidebar--collapsed {
+  width: var(--acp-sidebar-w-sm);
+}
+
+.acp-sidebar--collapsed .acp-sidebar__brand-text,
+.acp-sidebar--collapsed .acp-sidebar__label,
+.acp-sidebar--collapsed .acp-sidebar__section-label,
+.acp-sidebar--collapsed .acp-sidebar__version-text {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+}
+
+.acp-sidebar--collapsed .acp-sidebar__link {
+  justify-content: center;
+  padding: 0.625rem;
+}
+
+.acp-sidebar--collapsed .acp-sidebar__link--active::before {
+  left: -8px;
+}
+
+.acp-sidebar--collapsed .acp-sidebar__item {
+  margin: 1px var(--acp-sp-2);
+}
+
+/* Tooltip on collapsed */
+.acp-sidebar--collapsed .acp-sidebar__link {
+  position: relative;
+}
+
+.acp-sidebar--collapsed .acp-sidebar__link:hover::after {
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--acp-navy-dark);
+  color: #fff;
+  font-size: var(--acp-fs-xs);
+  font-weight: var(--acp-fw-medium);
+  padding: 4px 10px;
+  border-radius: var(--acp-r-md);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: var(--acp-z-dropdown);
+  box-shadow: var(--acp-shadow-lg);
+}

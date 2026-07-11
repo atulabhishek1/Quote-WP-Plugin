@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Adorable Client Portal — Admin Master CSS
+   Imports all split CSS files in dependency order.
+   ========================================================================== */
+
+@import url('acp-variables.css');
+@import url('acp-layout.css');
+@import url('acp-sidebar.css');
+@import url('acp-topbar.css');
+@import url('acp-cards.css');
+@import url('acp-dashboard.css');
+@import url('acp-responsive.css');

@@ -1,0 +1,154 @@
+/* ==========================================================================
+   Adorable Client Portal — CSS Variables (Design Tokens)
+   Single source of truth. All other CSS files consume these variables.
+   Brand: Primary #C8A96A  Secondary #2F4858  per ui-design-system.md
+   ========================================================================== */
+
+:root {
+  /* ── Brand Palette ─────────────────────────────────────────────────────── */
+  --acp-gold:           #C8A96A;
+  --acp-gold-light:     #dfc08e;
+  --acp-gold-dark:      #a8893a;
+  --acp-gold-bg:        #fdf8f0;
+  --acp-gold-bg-dark:   rgba(200,169,106,0.12);
+
+  --acp-navy:           #2F4858;
+  --acp-navy-light:     #3d5a6e;
+  --acp-navy-dark:      #1e3040;
+  --acp-navy-bg:        #eef2f5;
+
+  /* ── Semantic Colours ──────────────────────────────────────────────────── */
+  --acp-primary:        #C8A96A;
+  --acp-primary-light:  #dfc08e;
+  --acp-primary-dark:   #a8893a;
+  --acp-primary-bg:     #fdf8f0;
+
+  --acp-success:        #10b981;
+  --acp-success-light:  #34d399;
+  --acp-success-bg:     #ecfdf5;
+
+  --acp-warning:        #f59e0b;
+  --acp-warning-light:  #fbbf24;
+  --acp-warning-bg:     #fffbeb;
+
+  --acp-danger:         #ef4444;
+  --acp-danger-light:   #f87171;
+  --acp-danger-bg:      #fef2f2;
+
+  --acp-info:           #3b82f6;
+  --acp-info-light:     #60a5fa;
+  --acp-info-bg:        #eff6ff;
+
+  --acp-purple:         #8b5cf6;
+  --acp-purple-light:   #a78bfa;
+  --acp-purple-bg:      #f5f3ff;
+
+  /* ── Neutrals ──────────────────────────────────────────────────────────── */
+  --acp-white:          #ffffff;
+  --acp-bg:             #f4f6f9;
+  --acp-surface:        #ffffff;
+  --acp-surface-2:      #f1f5f9;
+  --acp-surface-3:      #e8edf3;
+  --acp-border:         #e2e8f0;
+  --acp-border-light:   #f1f5f9;
+
+  /* ── Text ──────────────────────────────────────────────────────────────── */
+  --acp-text:           #1a2332;
+  --acp-text-secondary: #64748b;
+  --acp-text-muted:     #94a3b8;
+  --acp-text-inverse:   #ffffff;
+
+  /* ── Typography ────────────────────────────────────────────────────────── */
+  --acp-font:           'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --acp-fs-xs:          0.6875rem;
+  --acp-fs-sm:          0.8125rem;
+  --acp-fs-base:        0.875rem;
+  --acp-fs-md:          1rem;
+  --acp-fs-lg:          1.125rem;
+  --acp-fs-xl:          1.25rem;
+  --acp-fs-2xl:         1.5rem;
+  --acp-fs-3xl:         1.875rem;
+  --acp-fs-4xl:         2.25rem;
+  --acp-fw-normal:      400;
+  --acp-fw-medium:      500;
+  --acp-fw-semibold:    600;
+  --acp-fw-bold:        700;
+  --acp-fw-extrabold:   800;
+  --acp-lh-tight:       1.2;
+  --acp-lh-snug:        1.375;
+  --acp-lh-normal:      1.5;
+  --acp-lh-relaxed:     1.75;
+
+  /* ── Spacing ───────────────────────────────────────────────────────────── */
+  --acp-sp-1:   0.25rem;
+  --acp-sp-2:   0.5rem;
+  --acp-sp-3:   0.75rem;
+  --acp-sp-4:   1rem;
+  --acp-sp-5:   1.25rem;
+  --acp-sp-6:   1.5rem;
+  --acp-sp-7:   1.75rem;
+  --acp-sp-8:   2rem;
+  --acp-sp-10:  2.5rem;
+  --acp-sp-12:  3rem;
+  --acp-sp-16:  4rem;
+
+  /* ── Border Radius ─────────────────────────────────────────────────────── */
+  --acp-r-sm:   0.375rem;
+  --acp-r-md:   0.5rem;
+  --acp-r-lg:   0.75rem;
+  --acp-r-xl:   1rem;
+  --acp-r-2xl:  1.25rem;
+  --acp-r-3xl:  1.5rem;
+  --acp-r-full: 9999px;
+
+  /* ── Shadows ───────────────────────────────────────────────────────────── */
+  --acp-shadow-xs:   0 1px 2px 0 rgba(0,0,0,0.05);
+  --acp-shadow-sm:   0 1px 3px 0 rgba(0,0,0,0.08), 0 1px 2px -1px rgba(0,0,0,0.06);
+  --acp-shadow-md:   0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.06);
+  --acp-shadow-lg:   0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.05);
+  --acp-shadow-xl:   0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+  --acp-shadow-card: 0 2px 8px 0 rgba(47,72,88,0.08);
+  --acp-shadow-glow: 0 0 0 3px rgba(200,169,106,0.2);
+
+  /* ── Transitions ───────────────────────────────────────────────────────── */
+  --acp-ease:       cubic-bezier(0.4, 0, 0.2, 1);
+  --acp-t-fast:     150ms;
+  --acp-t-base:     200ms;
+  --acp-t-slow:     300ms;
+  --acp-t-slower:   400ms;
+
+  /* ── Layout ────────────────────────────────────────────────────────────── */
+  --acp-sidebar-w:        256px;
+  --acp-sidebar-w-sm:     68px;
+  --acp-topbar-h:         64px;
+  --acp-content-max:      1400px;
+  --acp-content-pad:      var(--acp-sp-6);
+
+  /* ── Z-index ───────────────────────────────────────────────────────────── */
+  --acp-z-sidebar:    100;
+  --acp-z-topbar:     200;
+  --acp-z-dropdown:   300;
+  --acp-z-modal:      400;
+  --acp-z-toast:      500;
+}
+
+/* ── Dark Mode Overrides ─────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --acp-bg:             #0d1117;
+  --acp-surface:        #161b22;
+  --acp-surface-2:      #21262d;
+  --acp-surface-3:      #30363d;
+  --acp-border:         #30363d;
+  --acp-border-light:   #21262d;
+  --acp-text:           #e6edf3;
+  --acp-text-secondary: #8b949e;
+  --acp-text-muted:     #6e7681;
+  --acp-primary-bg:     rgba(200,169,106,0.1);
+  --acp-navy-bg:        rgba(47,72,88,0.3);
+  --acp-success-bg:     rgba(16,185,129,0.1);
+  --acp-warning-bg:     rgba(245,158,11,0.1);
+  --acp-danger-bg:      rgba(239,68,68,0.1);
+  --acp-info-bg:        rgba(59,130,246,0.1);
+  --acp-purple-bg:      rgba(139,92,246,0.1);
+  --acp-shadow-card:    0 2px 8px 0 rgba(0,0,0,0.4);
+}

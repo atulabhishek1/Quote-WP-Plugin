@@ -37,7 +37,7 @@ final class Constants {
 	public const OPTION_SETTINGS        = 'acp_settings';
 	public const OPTION_ACTIVATED       = 'acp_activated';
 
-	// DB version.
+	// DB version — increment this when a new migration is added.
 	public const DB_VERSION = '1.0.0';
 
 	// Capability slugs.
@@ -79,6 +79,53 @@ final class Constants {
 		'paid'      => 'Paid',
 		'refunded'  => 'Refunded',
 	];
+
+	// Client statuses.
+	public const CLIENT_STATUSES = [
+		'lead'      => 'Lead',
+		'prospect'  => 'Prospect',
+		'active'    => 'Active',
+		'on_hold'   => 'On Hold',
+		'completed' => 'Completed',
+		'inactive'  => 'Inactive',
+		'archived'  => 'Archived',
+	];
+
+	// Lead sources.
+	public const LEAD_SOURCES = [
+		'referral'       => 'Referral',
+		'instagram'      => 'Instagram',
+		'facebook'       => 'Facebook',
+		'google'         => 'Google',
+		'website'        => 'Website',
+		'walk_in'        => 'Walk In',
+		'exhibition'     => 'Exhibition',
+		'houzz'          => 'Houzz',
+		'justdial'       => 'JustDial',
+		'other'          => 'Other',
+	];
+
+	// Additional table names.
+	public const TABLE_CLIENT_NOTES     = 'ac_client_notes';
+	public const TABLE_CLIENT_DOCUMENTS = 'ac_client_documents';
+	public const TABLE_CLIENT_CONTACTS  = 'ac_client_contacts';
+	public const TABLE_CLIENT_ADDRESSES = 'ac_client_addresses';
+
+	// Nonce actions for clients.
+	public const NONCE_CLIENT_SAVE   = 'acp_client_save';
+	public const NONCE_CLIENT_DELETE = 'acp_client_delete';
+	public const NONCE_CLIENT_BULK   = 'acp_client_bulk';
+	public const NONCE_CLIENT_IMPORT = 'acp_client_import';
+
+	// Client type values.
+	public const CLIENT_TYPES = [
+		'individual' => 'Individual',
+		'company'    => 'Company',
+	];
+
+	// Client code prefix.
+	public const CLIENT_CODE_PREFIX = 'AC';
+	public const CLIENT_CODE_PAD    = 6;
 
 	// Prevent instantiation.
 	private function __construct() {}

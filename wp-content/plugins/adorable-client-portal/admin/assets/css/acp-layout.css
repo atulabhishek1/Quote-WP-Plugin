@@ -1,0 +1,242 @@
+/* ==========================================================================
+   Adorable Client Portal — Layout
+   Full-page shell: acp-wrap, acp-sidebar slot, acp-main slot.
+   Overrides WordPress admin chrome so our UI takes full control.
+   ========================================================================== */
+
+/* ── WordPress Admin Chrome Reset ─────────────────────────────────────────── */
+#wpwrap,
+#wpcontent,
+#wpbody,
+#wpbody-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  float: none !important;
+  background: var(--acp-bg) !important;
+}
+
+.wp-admin #wpcontent {
+  padding-left: 0 !important;
+}
+
+/* ── Root Wrapper ──────────────────────────────────────────────────────────── */
+.acp-wrap {
+  display: flex;
+  min-height: 100vh;
+  background: var(--acp-bg);
+  font-family: var(--acp-font);
+  font-size: var(--acp-fs-base);
+  color: var(--acp-text);
+  line-height: var(--acp-lh-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.acp-wrap *,
+.acp-wrap *::before,
+.acp-wrap *::after {
+  box-sizing: border-box;
+}
+
+/* ── Main Area (everything right of sidebar) ───────────────────────────────── */
+.acp-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--acp-sidebar-w);
+  transition: margin-left var(--acp-t-slow) var(--acp-ease);
+}
+
+.acp-main--expanded {
+  margin-left: var(--acp-sidebar-w-sm);
+}
+
+/* ── Content Area ──────────────────────────────────────────────────────────── */
+.acp-content {
+  flex: 1;
+  padding: var(--acp-sp-6) var(--acp-content-pad);
+  padding-top: calc(var(--acp-topbar-h) + var(--acp-sp-6));
+  max-width: var(--acp-content-max);
+  width: 100%;
+}
+
+/* ── Utility: visually hidden ──────────────────────────────────────────────── */
+.acp-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Skeleton animation ────────────────────────────────────────────────────── */
+@keyframes acp-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.acp-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--acp-surface-2) 25%,
+    var(--acp-surface-3) 50%,
+    var(--acp-surface-2) 75%
+  );
+  background-size: 800px 100%;
+  animation: acp-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--acp-r-md);
+}
+
+/* ── Empty state ───────────────────────────────────────────────────────────── */
+.acp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--acp-sp-3);
+  padding: var(--acp-sp-10) var(--acp-sp-6);
+  text-align: center;
+  color: var(--acp-text-muted);
+}
+
+.acp-empty__icon {
+  width: 48px;
+  height: 48px;
+  opacity: 0.35;
+}
+
+.acp-empty__title {
+  font-size: var(--acp-fs-md);
+  font-weight: var(--acp-fw-semibold);
+  color: var(--acp-text-secondary);
+  margin: 0;
+}
+
+.acp-empty__desc {
+  font-size: var(--acp-fs-sm);
+  margin: 0;
+}
+
+/* ── Badge ─────────────────────────────────────────────────────────────────── */
+.acp-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--acp-sp-2);
+  font-size: var(--acp-fs-xs);
+  font-weight: var(--acp-fw-semibold);
+  border-radius: var(--acp-r-full);
+  line-height: 1.5;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.acp-badge--lead         { background: var(--acp-surface-2);   color: var(--acp-text-secondary); }
+.acp-badge--design       { background: var(--acp-primary-bg);  color: var(--acp-gold-dark); }
+.acp-badge--approval     { background: var(--acp-warning-bg);  color: var(--acp-warning); }
+.acp-badge--production   { background: var(--acp-purple-bg);   color: var(--acp-purple); }
+.acp-badge--dispatch     { background: var(--acp-info-bg);     color: var(--acp-info); }
+.acp-badge--installation { background: var(--acp-warning-bg);  color: var(--acp-warning); }
+.acp-badge--completed    { background: var(--acp-success-bg);  color: var(--acp-success); }
+.acp-badge--draft        { background: var(--acp-surface-2);   color: var(--acp-text-secondary); }
+.acp-badge--sent         { background: var(--acp-info-bg);     color: var(--acp-info); }
+.acp-badge--approved     { background: var(--acp-success-bg);  color: var(--acp-success); }
+.acp-badge--rejected     { background: var(--acp-danger-bg);   color: var(--acp-danger); }
+.acp-badge--revised      { background: var(--acp-warning-bg);  color: var(--acp-warning); }
+.acp-badge--pending      { background: var(--acp-warning-bg);  color: var(--acp-warning); }
+.acp-badge--partial      { background: var(--acp-info-bg);     color: var(--acp-info); }
+.acp-badge--paid         { background: var(--acp-success-bg);  color: var(--acp-success); }
+.acp-badge--refunded     { background: var(--acp-danger-bg);   color: var(--acp-danger); }
+
+/* ── Button ────────────────────────────────────────────────────────────────── */
+.acp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--acp-sp-2);
+  padding: 0.5rem 1rem;
+  font-family: var(--acp-font);
+  font-size: var(--acp-fs-sm);
+  font-weight: var(--acp-fw-medium);
+  line-height: 1;
+  border-radius: var(--acp-r-lg);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  transition:
+    background var(--acp-t-fast) var(--acp-ease),
+    border-color var(--acp-t-fast) var(--acp-ease),
+    box-shadow var(--acp-t-fast) var(--acp-ease),
+    transform var(--acp-t-fast) var(--acp-ease);
+}
+
+.acp-btn:focus-visible {
+  outline: 2px solid var(--acp-primary);
+  outline-offset: 2px;
+}
+
+.acp-btn:active { transform: translateY(1px); }
+
+.acp-btn--primary {
+  background: var(--acp-gold);
+  color: #fff;
+  border-color: var(--acp-gold);
+}
+
+.acp-btn--primary:hover {
+  background: var(--acp-gold-dark);
+  border-color: var(--acp-gold-dark);
+  color: #fff;
+  box-shadow: var(--acp-shadow-md);
+}
+
+.acp-btn--secondary {
+  background: var(--acp-surface);
+  color: var(--acp-text);
+  border-color: var(--acp-border);
+}
+
+.acp-btn--secondary:hover {
+  background: var(--acp-surface-2);
+  color: var(--acp-text);
+}
+
+.acp-btn--ghost {
+  background: transparent;
+  color: var(--acp-text-secondary);
+  border-color: transparent;
+}
+
+.acp-btn--ghost:hover {
+  background: var(--acp-surface-2);
+  color: var(--acp-text);
+}
+
+.acp-btn--sm {
+  padding: 0.3125rem 0.75rem;
+  font-size: var(--acp-fs-xs);
+  border-radius: var(--acp-r-md);
+}
+
+.acp-btn--icon {
+  padding: 0.5rem;
+  border-radius: var(--acp-r-lg);
+  background: transparent;
+  border-color: transparent;
+  color: var(--acp-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--acp-t-fast) var(--acp-ease), color var(--acp-t-fast) var(--acp-ease);
+}
+
+.acp-btn--icon:hover {
+  background: var(--acp-surface-2);
+  color: var(--acp-text);
+}
