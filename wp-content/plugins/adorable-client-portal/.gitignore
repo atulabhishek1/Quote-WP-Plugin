@@ -1,0 +1,33 @@
+# WordPress
+wp-config.php
+wp-content/uploads/
+wp-content/cache/
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Build
+/dist/
+*.min.js
+*.min.css
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+
+# Test coverage
+/coverage/
+.phpunit.result.cache
