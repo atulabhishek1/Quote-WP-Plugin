@@ -1,0 +1,23 @@
+{
+  "editor.tabSize": 4,
+  "editor.insertSpaces": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": null,
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[json]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "php.validate.executablePath": "",
+  "intelephense.environment.phpVersion": "8.0",
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "phpcs.standard": "${workspaceFolder}/phpcs.xml"
+}
