@@ -158,5 +158,27 @@ final class Assets {
 				]
 			);
 		}
+
+		// Clients page scripts.
+		if ( 'adorable-crm_page_adorable-clients' === $hook_suffix ) {
+			wp_enqueue_script( 'acp-clients-js', $js . 'acp-clients.js', [ 'acp-admin', 'jquery' ], $v, true );
+			wp_localize_script(
+				'acp-clients-js',
+				'acpClients',
+				[
+					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( Constants::NONCE_AJAX ),
+					'i18n'    => [
+						'saving'        => __( 'Saving…', 'adorable-client-portal' ),
+						'saveClient'    => __( 'Save Client', 'adorable-client-portal' ),
+						'updateClient'  => __( 'Update Client', 'adorable-client-portal' ),
+						'confirmDelete' => __( 'Are you sure you want to delete this client? This action can be undone.', 'adorable-client-portal' ),
+						'deleting'      => __( 'Deleting…', 'adorable-client-portal' ),
+						'success'       => __( 'Operation successful.', 'adorable-client-portal' ),
+						'error'         => __( 'Something went wrong.', 'adorable-client-portal' ),
+					],
+				]
+			);
+		}
 	}
 }

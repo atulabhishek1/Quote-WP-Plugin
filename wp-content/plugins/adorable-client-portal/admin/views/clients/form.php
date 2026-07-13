@@ -88,13 +88,28 @@ $val = static function ( string $field ) use ( $client ): string {
 							<div class="acp-card__body">
 								<div class="acp-form-grid acp-form-grid--2">
 									<div class="acp-form-field acp-form-field--required">
+										<label class="acp-form-label" for="client_type"><?php esc_html_e( 'Client Type', 'adorable-client-portal' ); ?></label>
+										<select id="client_type" name="client_type" class="acp-form-select" required>
+											<option value="individual" <?php selected( $val( 'client_type' ) ?: 'individual', 'individual' ); ?>><?php esc_html_e( 'Individual', 'adorable-client-portal' ); ?></option>
+											<option value="company" <?php selected( $val( 'client_type' ), 'company' ); ?>><?php esc_html_e( 'Company', 'adorable-client-portal' ); ?></option>
+										</select>
+									</div>
+									<div class="acp-form-field acp-form-field--required">
 										<label class="acp-form-label" for="client_name"><?php esc_html_e( 'Client Name', 'adorable-client-portal' ); ?></label>
 										<input type="text" id="client_name" name="client_name" class="acp-form-input" value="<?php echo esc_attr( $val( 'name' ) ); ?>" required autocomplete="name">
 										<span class="acp-form-error" id="err_client_name"></span>
 									</div>
-									<div class="acp-form-field">
+									<div class="acp-form-field acp-form-company-field" id="acpCompanyField" <?php echo $val( 'client_type' ) === 'company' ? '' : 'style="display:none"'; ?>>
 										<label class="acp-form-label" for="company_name"><?php esc_html_e( 'Company Name', 'adorable-client-portal' ); ?></label>
 										<input type="text" id="company_name" name="company_name" class="acp-form-input" value="<?php echo esc_attr( $val( 'company_name' ) ); ?>" autocomplete="organization">
+									</div>
+									<div class="acp-form-field acp-form-company-field" id="acpPrimaryContactField" <?php echo $val( 'client_type' ) === 'company' ? '' : 'style="display:none"'; ?>>
+										<label class="acp-form-label" for="primary_contact"><?php esc_html_e( 'Primary Contact Person', 'adorable-client-portal' ); ?></label>
+										<input type="text" id="primary_contact" name="primary_contact" class="acp-form-input" value="<?php echo esc_attr( $val( 'primary_contact' ) ); ?>">
+									</div>
+									<div class="acp-form-field acp-form-company-field" id="acpSecondaryContactField" <?php echo $val( 'client_type' ) === 'company' ? '' : 'style="display:none"'; ?>>
+										<label class="acp-form-label" for="secondary_contact"><?php esc_html_e( 'Secondary Contact Person', 'adorable-client-portal' ); ?></label>
+										<input type="text" id="secondary_contact" name="secondary_contact" class="acp-form-input" value="<?php echo esc_attr( $val( 'secondary_contact' ) ); ?>">
 									</div>
 									<div class="acp-form-field">
 										<label class="acp-form-label" for="lead_source"><?php esc_html_e( 'Lead Source', 'adorable-client-portal' ); ?></label>
@@ -221,7 +236,7 @@ $val = static function ( string $field ) use ( $client ): string {
 							</div>
 							<div class="acp-card__body">
 								<div class="acp-form-grid acp-form-grid--2">
-									<div class="acp-form-field">
+									<div class="acp-form-field acp-form-company-field" id="acpGstField" <?php echo $val( 'client_type' ) === 'company' ? '' : 'style="display:none"'; ?>>
 										<label class="acp-form-label" for="gst_number"><?php esc_html_e( 'GST Number', 'adorable-client-portal' ); ?></label>
 										<input type="text" id="gst_number" name="gst_number" class="acp-form-input acp-duplicate-check" data-field="gst_number" data-exclude="<?php echo esc_attr( (string) $client_id ); ?>" value="<?php echo esc_attr( $val( 'gst_number' ) ); ?>" maxlength="15" style="text-transform:uppercase" placeholder="22AAAAA0000A1Z5">
 										<span class="acp-form-hint"><?php esc_html_e( '15-character GST number', 'adorable-client-portal' ); ?></span>

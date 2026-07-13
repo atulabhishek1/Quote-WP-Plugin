@@ -253,7 +253,7 @@ final class Clients_Controller {
 	// -------------------------------------------------------------------------
 
 	public function ajax_bulk(): void {
-		check_ajax_referer( Constants::NONCE_CLIENT_BULK, 'nonce' );
+		check_ajax_referer( Constants::NONCE_AJAX, 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'adorable-client-portal' ) ], 403 );
@@ -418,13 +418,16 @@ final class Clients_Controller {
 	 */
 	private function sanitize_form_data( array $post ): array {
 		return [
+			'client_type'       => sanitize_key( wp_unslash( $post['client_type'] ?? 'individual' ) ),
 			'client_name'       => sanitize_text_field( wp_unslash( $post['client_name'] ?? '' ) ),
 			'company_name'      => sanitize_text_field( wp_unslash( $post['company_name'] ?? '' ) ),
+			'primary_contact'   => sanitize_text_field( wp_unslash( $post['primary_contact'] ?? '' ) ),
+			'secondary_contact' => sanitize_text_field( wp_unslash( $post['secondary_contact'] ?? '' ) ),
 			'email'             => sanitize_email( wp_unslash( $post['email'] ?? '' ) ),
 			'alternate_email'   => sanitize_email( wp_unslash( $post['alternate_email'] ?? '' ) ),
 			'mobile'            => sanitize_text_field( wp_unslash( $post['mobile'] ?? '' ) ),
 			'alternate_mobile'  => sanitize_text_field( wp_unslash( $post['alternate_mobile'] ?? '' ) ),
-			'whatsapp'          => sanitize_text_field( wp_unslash( $post['whatsapp'] ?? '' ) ),
+			'whatsapp_number'   => sanitize_text_field( wp_unslash( $post['whatsapp'] ?? '' ) ),
 			'gst_number'        => strtoupper( sanitize_text_field( wp_unslash( $post['gst_number'] ?? '' ) ) ),
 			'pan_number'        => strtoupper( sanitize_text_field( wp_unslash( $post['pan_number'] ?? '' ) ) ),
 			'billing_address'   => sanitize_textarea_field( wp_unslash( $post['billing_address'] ?? '' ) ),
@@ -434,7 +437,7 @@ final class Clients_Controller {
 			'country'           => sanitize_text_field( wp_unslash( $post['country'] ?? 'India' ) ),
 			'pincode'           => sanitize_text_field( wp_unslash( $post['pincode'] ?? '' ) ),
 			'lead_source'       => sanitize_key( wp_unslash( $post['lead_source'] ?? '' ) ),
-			'assigned_salesperson' => (int) ( $post['assigned_salesperson'] ?? 0 ),
+			'assigned_sales'    => (int) ( $post['assigned_salesperson'] ?? 0 ),
 			'assigned_designer' => (int) ( $post['assigned_designer'] ?? 0 ),
 			'status'            => sanitize_key( wp_unslash( $post['status'] ?? 'lead' ) ),
 			'tags'              => sanitize_text_field( wp_unslash( $post['tags'] ?? '' ) ),
