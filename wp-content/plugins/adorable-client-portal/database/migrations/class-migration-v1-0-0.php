@@ -100,24 +100,25 @@ final class Migration_V1_0_0 {
 	 *   client_code      — auto-generated, e.g. AC000001
 	 *   client_type      — individual | company
 	 *   deleted_at       — soft-delete timestamp (NULL = active)
-	 *
-	 * Unique keys: client_code, mobile, email, gst_number
-	 * Indexes:     status, city, assigned_sales, assigned_designer,
-	 *              created_at, deleted_at
-	 *
-	 * @return void
-	 */
-	private function create_clients_table(): void {
-		$table = $this->db->prefix . Constants::TABLE_CLIENTS;
+ *   is_deleted       — soft-delete flag (0 = active)
+ *
+ * Unique keys: client_code, mobile, email, gst_number
+ * Indexes:     status, city, assigned_sales, assigned_designer,
+ *              created_at, deleted_at, is_deleted
+ *
+ * @return void
+ */
+ private function create_clients_table(): void {
+	$table = $this->db->prefix . Constants::TABLE_CLIENTS;
 
-		/*
-		 * dbDelta() is strict about formatting:
-		 *   - Two spaces before column definitions.
-		 *   - PRIMARY KEY must be on its own line.
-		 *   - No trailing comma on the last column.
-		 *   - KEY definitions after all columns.
-		 */
-		$sql = "CREATE TABLE {$table} (
+	/*
+	 * dbDelta() is strict about formatting:
+	 *   - Two spaces before column definitions.
+	 *   - PRIMARY KEY must be on its own line.
+	 *   - No trailing comma on the last column.
+	 *   - KEY definitions after all columns.
+	 */
+	$sql = "CREATE TABLE {$table} (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   client_code VARCHAR(30) NOT NULL DEFAULT '',
   client_type ENUM('individual','company') NOT NULL DEFAULT 'individual',
@@ -147,6 +148,7 @@ final class Migration_V1_0_0 {
   updated_by BIGINT UNSIGNED NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
   updated_at DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+  is_deleted TINYINT(1) NOT NULL DEFAULT 0,
   deleted_at DATETIME DEFAULT NULL,
   PRIMARY KEY  (id),
   UNIQUE KEY client_code (client_code),
@@ -158,7 +160,8 @@ final class Migration_V1_0_0 {
   KEY assigned_sales (assigned_sales),
   KEY assigned_designer (assigned_designer),
   KEY created_at (created_at),
-  KEY deleted_at (deleted_at)
+  KEY deleted_at (deleted_at),
+  KEY is_deleted (is_deleted)
 ) {$this->charset_collate};";
 
 		dbDelta( $sql );

@@ -9,6 +9,8 @@ declare( strict_types=1 );
 
 namespace AdorableClientPortal\Includes;
 
+use AdorableClientPortal\Database\Migration_Runner;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -26,5 +28,6 @@ final class Activator {
 		}
 
 		update_option( Constants::OPTION_ACTIVATED, 1 );
+		Migration_Runner::run();
 	}
 }

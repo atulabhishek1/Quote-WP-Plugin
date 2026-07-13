@@ -9,6 +9,8 @@ declare( strict_types=1 );
 
 namespace AdorableClientPortal\Includes;
 
+use AdorableClientPortal\Database\Migration_Runner;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -56,6 +58,7 @@ final class Plugin {
 	 * Bootstrap all modules and run the loader.
 	 */
 	public function run(): void {
+		Migration_Runner::run();
 		$this->define_admin_hooks();
 		$this->loader->run();
 	}
@@ -73,5 +76,6 @@ final class Plugin {
 
 		$this->loader->add_action( 'admin_menu', [ $admin_menu, 'register_menus' ] );
 		$this->loader->add_action( 'admin_enqueue_scripts', [ $assets, 'enqueue' ] );
+		$this->loader->add_action( 'wp_ajax_acp_export_clients', [ new \AdorableClientPortal\Admin\Clients_Controller(), 'ajax_export_csv' ] );
 	}
 }

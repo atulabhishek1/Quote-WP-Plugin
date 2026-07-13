@@ -88,7 +88,7 @@ final class Admin_Menu {
 				'menu_title' => __( 'Clients', 'adorable-client-portal' ),
 				'capability' => 'manage_options',
 				'slug'       => 'adorable-clients',
-				'callback'   => [ Placeholder_Controller::class, 'clients' ],
+				'callback'   => [ new Clients_Controller(), 'render' ],
 			],
 			[
 				'page_title' => __( 'Projects', 'adorable-client-portal' ),

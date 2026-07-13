@@ -14,6 +14,7 @@ namespace AdorableClientPortal\Admin;
 
 use AdorableClientPortal\Includes\Client_Model;
 use AdorableClientPortal\Includes\Constants;
+use AdorableClientPortal\Includes\Interfaces\Client_Repository_Interface;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -22,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Clients_Repository
  */
-final class Clients_Repository {
+final class Clients_Repository implements Client_Repository_Interface {
 
 	/** @var \wpdb */
 	private \wpdb $db;
@@ -294,6 +295,184 @@ final class Clients_Repository {
 	}
 
 	/**
+	 * Persist a new client and return its generated ID.
+	 *
+	 * @param array<string,mixed> $data Validated, sanitised field map.
+	 * @return int|false New client ID, or false on failure.
+	 */
+	public function create( array $data ): int|false {
+		return $this->insert( $data );
+	}
+
+	/**
+	 * Find a client by primary key.
+	 *
+	 * @param int  $id             Client ID.
+	 * @param bool $include_deleted Include soft-deleted records too.
+	 * @return Client_Model|null
+	 */
+	public function find( int $id, bool $include_deleted = false ): ?Client_Model {
+		return $this->get_client( $id, $include_deleted );
+	}
+
+	/**
+	 * Alias of find() — explicit name for clarity in service layer.
+	 *
+	 * @param int $id Client ID.
+	 * @return Client_Model|null
+	 */
+	public function findById( int $id ): ?Client_Model {
+		return $this->get_client( $id );
+	}
+
+	/**
+	 * Find a client by email address.
+	 *
+	 * @param string $email Email address.
+	 * @return Client_Model|null
+	 */
+	public function findByEmail( string $email ): ?Client_Model {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+		$row = $this->db->get_row(
+			$this->db->prepare(
+				"SELECT * FROM `{$this->table}` WHERE `email` = %s AND `is_deleted` = 0 LIMIT 1",
+				$email
+			),
+			ARRAY_A
+		);
+
+		return $row ? new Client_Model( $row ) : null;
+	}
+
+	/**
+	 * Find a client by mobile number.
+	 *
+	 * @param string $mobile Mobile number.
+	 * @return Client_Model|null
+	 */
+	public function findByMobile( string $mobile ): ?Client_Model {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+		$row = $this->db->get_row(
+			$this->db->prepare(
+				"SELECT * FROM `{$this->table}` WHERE `mobile` = %s AND `is_deleted` = 0 LIMIT 1",
+				$mobile
+			),
+			ARRAY_A
+		);
+
+		return $row ? new Client_Model( $row ) : null;
+	}
+
+	/**
+	 * Find a client by their unique client code.
+	 *
+	 * @param string $code Client code.
+	 * @return Client_Model|null
+	 */
+	public function findByCode( string $code ): ?Client_Model {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+		$row = $this->db->get_row(
+			$this->db->prepare(
+				"SELECT * FROM `{$this->table}` WHERE `client_code` = %s AND `is_deleted` = 0 LIMIT 1",
+				$code
+			),
+			ARRAY_A
+		);
+
+		return $row ? new Client_Model( $row ) : null;
+	}
+
+	/**
+	 * Check whether a client with the given field value already exists.
+	 *
+	 * @param string $field      Column name: 'email' | 'mobile' | 'gst_number' | 'client_code'.
+	 * @param string $value      Value to check.
+	 * @param int    $exclude_id Exclude this ID (for edit operations).
+	 * @return bool
+	 */
+	public function exists( string $field, string $value, int $exclude_id = 0 ): bool {
+		$allowed = [ 'email', 'mobile', 'gst_number', 'client_code' ];
+
+		if ( ! in_array( $field, $allowed, true ) ) {
+			return false;
+		}
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+		$count = (int) $this->db->get_var(
+			$this->db->prepare(
+				"SELECT COUNT(*) FROM `{$this->table}` WHERE `{$field}` = %s AND `id` != %d AND `is_deleted` = 0",
+				$value,
+				$exclude_id
+			)
+		);
+
+		return $count > 0;
+	}
+
+	/**
+	 * Return a paginated, filtered list of clients.
+	 *
+	 * @param array<string,mixed> $args Query arguments.
+	 * @return Client_Model[]
+	 */
+	public function getAll( array $args = [] ): array {
+		return $this->get_clients( $args );
+	}
+
+	/**
+	 * Full-text search across name, mobile, email, company, GST, PAN.
+	 *
+	 * @param string $term     Search term.
+	 * @param int    $per_page Max results.
+	 * @return Client_Model[]
+	 */
+	public function search( string $term, int $per_page = 20 ): array {
+		return $this->get_clients([
+			'search'   => $term,
+			'per_page' => $per_page,
+			'paged'    => 1,
+		]);
+	}
+
+	/**
+	 * Return the total count matching the given filter args.
+	 *
+	 * @param array<string,mixed> $args Same filter args as getAll(), minus pagination.
+	 * @return int
+	 */
+	public function count( array $args = [] ): int {
+		return $this->count_clients( $args );
+	}
+
+	/**
+	 * Return distinct client cities for list filters.
+	 *
+	 * @return string[]
+	 */
+	public function getDistinctCities(): array {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$rows = $this->db->get_col(
+			"SELECT DISTINCT `city` FROM `{$this->table}` WHERE `city` <> '' AND `is_deleted` = 0 ORDER BY `city` ASC"
+		);
+
+		return array_filter( array_map( 'strval', $rows ) );
+	}
+
+	/**
+	 * Return distinct client states for list filters.
+	 *
+	 * @return string[]
+	 */
+	public function getDistinctStates(): array {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$rows = $this->db->get_col(
+			"SELECT DISTINCT `state` FROM `{$this->table}` WHERE `state` <> '' AND `is_deleted` = 0 ORDER BY `state` ASC"
+		);
+
+		return array_filter( array_map( 'strval', $rows ) );
+	}
+
+	/**
 	 * Insert a new client row.
 	 *
 	 * @param array<string,mixed> $data Sanitised column => value pairs.
@@ -302,6 +481,10 @@ final class Clients_Repository {
 	public function insert( array $data ): int|false {
 		$data['created_at'] = current_time( 'mysql' );
 		$data['updated_at'] = current_time( 'mysql' );
+
+		if ( ! isset( $data['is_deleted'] ) ) {
+			$data['is_deleted'] = 0;
+		}
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$result = $this->db->insert( $this->table, $data );
@@ -332,7 +515,21 @@ final class Clients_Repository {
 	 * @return bool
 	 */
 	public function soft_delete( int $id ): bool {
-		return $this->update( $id, [ 'is_deleted' => 1, 'status' => 'archived' ] );
+		return $this->update( $id, [
+			'is_deleted' => 1,
+			'deleted_at' => current_time( 'mysql' ),
+			'status'     => 'archived',
+		] );
+	}
+
+	/**
+	 * Soft-delete a client.
+	 *
+	 * @param int $id Client ID.
+	 * @return bool
+	 */
+	public function delete( int $id ): bool {
+		return $this->soft_delete( $id );
 	}
 
 	/**
@@ -342,7 +539,10 @@ final class Clients_Repository {
 	 * @return bool
 	 */
 	public function restore( int $id ): bool {
-		return $this->update( $id, [ 'is_deleted' => 0 ] );
+		return $this->update( $id, [
+			'is_deleted' => 0,
+			'deleted_at' => null,
+		] );
 	}
 
 	/**
