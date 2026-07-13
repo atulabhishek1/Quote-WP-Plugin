@@ -1,0 +1,1393 @@
+[13-Jul-2026 16:34:58 UTC] WordPress database error Unknown column 'tags' in 'field list' for query INSERT INTO `wp_ac_clients` (`client_type`, `client_name`, `company_name`, `primary_contact`, `secondary_contact`, `email`, `alternate_email`, `mobile`, `alternate_mobile`, `whatsapp_number`, `gst_number`, `pan_number`, `billing_address`, `site_address`, `city`, `state`, `country`, `pincode`, `lead_source`, `assigned_sales`, `assigned_designer`, `status`, `tags`, `notes`, `client_code`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_deleted`) VALUES ('individual', 'sdklfh', '', '', '', '', '', '8876763343', '', '', '', '', 'dfghj', '', 'ddfghjk', 'fsdghjk', 'India', '4545422', 'referral', '0', '0', 'prospect', '', 'dasrty', 'AC000001', '1', '1', '2026-07-13 16:34:58', '2026-07-13 16:34:58', '0') made by do_action('wp_ajax_acp_save_client'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->ajax_save, AdorableClientPortal\Admin\Clients_Repository->insert
+[13-Jul-2026 16:34:58 UTC] ACP INSERT ERROR: Unknown column 'tags' in 'field list'
+[13-Jul-2026 16:34:58 UTC] ACP INSERT DATA: {"client_type":"individual","client_name":"sdklfh","company_name":"","primary_contact":"","secondary_contact":"","email":"","alternate_email":"","mobile":"8876763343","alternate_mobile":"","whatsapp_number":"","gst_number":"","pan_number":"","billing_address":"dfghj","site_address":"","city":"ddfghjk","state":"fsdghjk","country":"India","pincode":"4545422","lead_source":"referral","assigned_sales":0,"assigned_designer":0,"status":"prospect","tags":"","notes":"dasrty","client_code":"AC000001","created_by":1,"updated_by":1,"created_at":"2026-07-13 16:34:58","updated_at":"2026-07-13 16:34:58","is_deleted":0}
+[13-Jul-2026 16:37:07 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_code in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 45
+[13-Jul-2026 16:37:07 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:37:07 UTC] PHP Deprecated:  ucfirst(): Passing null to parameter #1 ($string) of type string is deprecated in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:37:07 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 144
+[13-Jul-2026 16:39:54 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_code in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 45
+[13-Jul-2026 16:39:54 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:39:54 UTC] PHP Deprecated:  ucfirst(): Passing null to parameter #1 ($string) of type string is deprecated in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:39:54 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 144
+[13-Jul-2026 16:41:10 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:41:18 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:41:24 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '``' at line 1 for query SELECT COUNT(*) FROM ``wp_ac_clients`` made by do_action('toplevel_page_adorable-crm'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Dashboard_Controller::render, AdorableClientPortal\Admin\Dashboard_Controller::collect_data, AdorableClientPortal\Admin\Dashboard_Repository->get_total_clients
+[13-Jul-2026 16:41:24 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '``
+				ORDER BY `created_at` DESC
+				LIMIT 8' at line 2 for query SELECT `id`, `action`, `description`, `user_id`, `created_at`
+				FROM ``wp_ac_activity_logs``
+				ORDER BY `created_at` DESC
+				LIMIT 8 made by do_action('toplevel_page_adorable-crm'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Dashboard_Controller::render, AdorableClientPortal\Admin\Dashboard_Controller::collect_data, AdorableClientPortal\Admin\Dashboard_Repository->get_recent_activity
+[13-Jul-2026 16:41:24 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '``
+				ORDER BY `created_at` DESC
+				LIMIT 5' at line 2 for query SELECT `id`, `name`, `email`, `created_at`
+				FROM ``wp_ac_clients``
+				ORDER BY `created_at` DESC
+				LIMIT 5 made by do_action('toplevel_page_adorable-crm'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Dashboard_Controller::render, AdorableClientPortal\Admin\Dashboard_Controller::collect_data, AdorableClientPortal\Admin\Dashboard_Repository->get_recent_clients
+[13-Jul-2026 16:41:25 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:41:31 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:41:31 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '``' at line 1 for query SELECT COUNT(*) FROM ``wp_ac_clients`` made by do_action('toplevel_page_adorable-crm'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Dashboard_Controller::render, AdorableClientPortal\Admin\Dashboard_Controller::collect_data, AdorableClientPortal\Admin\Dashboard_Repository->get_total_clients
+[13-Jul-2026 16:41:31 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '``
+				ORDER BY `created_at` DESC
+				LIMIT 8' at line 2 for query SELECT `id`, `action`, `description`, `user_id`, `created_at`
+				FROM ``wp_ac_activity_logs``
+				ORDER BY `created_at` DESC
+				LIMIT 8 made by do_action('toplevel_page_adorable-crm'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Dashboard_Controller::render, AdorableClientPortal\Admin\Dashboard_Controller::collect_data, AdorableClientPortal\Admin\Dashboard_Repository->get_recent_activity
+[13-Jul-2026 16:41:31 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '``
+				ORDER BY `created_at` DESC
+				LIMIT 5' at line 2 for query SELECT `id`, `name`, `email`, `created_at`
+				FROM ``wp_ac_clients``
+				ORDER BY `created_at` DESC
+				LIMIT 5 made by do_action('toplevel_page_adorable-crm'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Dashboard_Controller::render, AdorableClientPortal\Admin\Dashboard_Controller::collect_data, AdorableClientPortal\Admin\Dashboard_Repository->get_recent_clients
+[13-Jul-2026 16:41:33 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:41:35 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:41:38 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_code in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 45
+[13-Jul-2026 16:41:38 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:41:38 UTC] PHP Deprecated:  ucfirst(): Passing null to parameter #1 ($string) of type string is deprecated in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:41:38 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 144
+[13-Jul-2026 16:48:16 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_code in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 45
+[13-Jul-2026 16:48:16 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:48:16 UTC] PHP Deprecated:  ucfirst(): Passing null to parameter #1 ($string) of type string is deprecated in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:48:16 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 144
+[13-Jul-2026 16:48:19 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:48:31 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:51:32 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:51:34 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:51:35 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:51:42 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:51:43 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:54:25 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:54:26 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:54:27 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:54:36 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 16:54:39 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$name in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 43
+[13-Jul-2026 16:54:39 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_code in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 45
+[13-Jul-2026 16:54:39 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:54:39 UTC] PHP Deprecated:  ucfirst(): Passing null to parameter #1 ($string) of type string is deprecated in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 142
+[13-Jul-2026 16:54:39 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$client_type in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 144
+[13-Jul-2026 17:01:33 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:02:41 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:07:44 UTC] PHP Parse error:  syntax error, unexpected token "->" in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\class-clients-repository.php on line 190
+[13-Jul-2026 17:08:02 UTC] PHP Parse error:  syntax error, unexpected token "->" in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\class-clients-repository.php on line 190
+[13-Jul-2026 17:08:38 UTC] PHP Parse error:  syntax error, unexpected token "->" in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\class-clients-repository.php on line 190
+[13-Jul-2026 17:12:24 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0 AND (`c`.`client_name` LIKE '%Test%' OR `c`.`mobile` LIKE '%Test%' OR `c`.`email` LIKE '%Test%' OR `c`.`company_name` LIKE '%Test%' OR `c`.`gst_number` LIKE '%Test%' OR `c`.`pan_number` LIKE '%Test%' OR `c`.`client_code` LIKE '%Test%')
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:12:31 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$name in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 43
+[13-Jul-2026 17:12:36 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:12:38 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:21:55 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$name in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 43
+[13-Jul-2026 17:22:00 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:22:02 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:22:03 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:22:03 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:22:15 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '``' at line 1 for query SELECT COUNT(*) FROM ``wp_ac_clients`` made by do_action('toplevel_page_adorable-crm'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Dashboard_Controller::render, AdorableClientPortal\Admin\Dashboard_Controller::collect_data, AdorableClientPortal\Admin\Dashboard_Repository->get_total_clients
+[13-Jul-2026 17:22:15 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '``
+				ORDER BY `created_at` DESC
+				LIMIT 8' at line 2 for query SELECT `id`, `action`, `description`, `user_id`, `created_at`
+				FROM ``wp_ac_activity_logs``
+				ORDER BY `created_at` DESC
+				LIMIT 8 made by do_action('toplevel_page_adorable-crm'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Dashboard_Controller::render, AdorableClientPortal\Admin\Dashboard_Controller::collect_data, AdorableClientPortal\Admin\Dashboard_Repository->get_recent_activity
+[13-Jul-2026 17:22:15 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '``
+				ORDER BY `created_at` DESC
+				LIMIT 5' at line 2 for query SELECT `id`, `name`, `email`, `created_at`
+				FROM ``wp_ac_clients``
+				ORDER BY `created_at` DESC
+				LIMIT 5 made by do_action('toplevel_page_adorable-crm'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Dashboard_Controller::render, AdorableClientPortal\Admin\Dashboard_Controller::collect_data, AdorableClientPortal\Admin\Dashboard_Repository->get_recent_clients
+[13-Jul-2026 17:22:20 UTC] WordPress database error Table 'local.wp_ac_projects' doesn't exist for query 
+			SELECT
+				`c`.`id`,
+				`c`.`client_code`,
+				`c`.`client_type`,
+				`c`.`company_name`,
+				`c`.`client_name` AS `name`,
+				`c`.`primary_contact`,
+				`c`.`secondary_contact`,
+				`c`.`email`,
+				`c`.`alternate_email`,
+				`c`.`mobile`,
+				`c`.`alternate_mobile`,
+				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`gst_number`,
+				`c`.`pan_number`,
+				`c`.`billing_address`,
+				`c`.`site_address`,
+				`c`.`city`,
+				`c`.`state`,
+				`c`.`country`,
+				`c`.`pincode`,
+				`c`.`lead_source`,
+				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_designer`,
+				`c`.`status`,
+				`c`.`notes`,
+				`c`.`is_deleted`,
+				`c`.`created_at`,
+				`c`.`updated_at`,
+				COALESCE((
+					SELECT COUNT(*) FROM `wp_ac_projects` `p`
+					WHERE `p`.`client_id` = `c`.`id`
+				), 0) AS `projects_count`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
+				), 0) AS `total_revenue`,
+				COALESCE((
+					SELECT SUM(`py`.`amount`) FROM `wp_ac_payments` `py`
+					INNER JOIN `wp_ac_projects` `pj` ON `pj`.`id` = `py`.`project_id`
+					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
+				), 0) AS `pending_amount`
+			FROM `wp_ac_clients` `c`
+			WHERE 1=1 AND `c`.`is_deleted` = 0
+			ORDER BY `created_at` DESC
+			LIMIT 20 OFFSET 0
+		 made by do_action('adorable-crm_page_adorable-clients'), WP_Hook->do_action, WP_Hook->apply_filters, AdorableClientPortal\Admin\Clients_Controller->render, AdorableClientPortal\Admin\Clients_Controller->render_list, AdorableClientPortal\Includes\Services\Client_Service->listClients, AdorableClientPortal\Includes\Repositories\Client_Repository->getAll, AdorableClientPortal\Includes\Repositories\Client_Repository->getClients
+[13-Jul-2026 17:29:43 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$name in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 43
+[13-Jul-2026 17:30:18 UTC] PHP Warning:  Undefined property: AdorableClientPortal\Includes\Client_Model::$name in C:\Users\atula\Local Sites\client-test\app\public\wp-content\plugins\adorable-client-portal\admin\views\clients\view.php on line 43

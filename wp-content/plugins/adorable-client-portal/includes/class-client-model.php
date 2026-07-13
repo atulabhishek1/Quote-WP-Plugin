@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Client_Model {
 
 	public readonly int    $id;
-	public readonly string $name;
+	public readonly string $client_name;
 	public readonly string $company_name;
 	public readonly string $email;
 	public readonly string $alternate_email;
@@ -51,6 +51,9 @@ final class Client_Model {
 	public readonly int    $projects_count;
 	public readonly float  $total_revenue;
 	public readonly float  $pending_amount;
+	
+	public readonly string $client_code;
+	public readonly string $client_type;
 
 	/**
 	 * Construct from a raw DB row (array or object).
@@ -59,13 +62,17 @@ final class Client_Model {
 	 */
 	public function __construct( array $row ) {
 		$this->id                   = (int) ( $row['id'] ?? 0 );
-		$this->name                 = (string) ( $row['name'] ?? '' );
+		$this->client_name          = (string) ( $row['client_name'] ?? '' );
+		
+		$this->client_code = (string) ( $row['client_code'] ?? '' );
+		$this->client_type = (string) ( $row['client_type'] ?? '' );
+
 		$this->company_name         = (string) ( $row['company_name'] ?? '' );
 		$this->email                = (string) ( $row['email'] ?? '' );
 		$this->alternate_email      = (string) ( $row['alternate_email'] ?? '' );
 		$this->mobile               = (string) ( $row['mobile'] ?? '' );
 		$this->alternate_mobile     = (string) ( $row['alternate_mobile'] ?? '' );
-		$this->whatsapp             = (string) ( $row['whatsapp'] ?? '' );
+		$this->whatsapp 			= (string) ( $row['whatsapp_number'] ?? '' );
 		$this->gst_number           = (string) ( $row['gst_number'] ?? '' );
 		$this->pan_number           = (string) ( $row['pan_number'] ?? '' );
 		$this->billing_address      = (string) ( $row['billing_address'] ?? '' );
@@ -75,7 +82,7 @@ final class Client_Model {
 		$this->country              = (string) ( $row['country'] ?? 'India' );
 		$this->pincode              = (string) ( $row['pincode'] ?? '' );
 		$this->lead_source          = (string) ( $row['lead_source'] ?? '' );
-		$this->assigned_salesperson = (int) ( $row['assigned_salesperson'] ?? 0 );
+		$this->assigned_salesperson = (int) ( $row['assigned_sales'] ?? 0 );
 		$this->assigned_designer    = (int) ( $row['assigned_designer'] ?? 0 );
 		$this->status               = (string) ( $row['status'] ?? 'lead' );
 		$this->tags                 = (string) ( $row['tags'] ?? '' );
@@ -137,9 +144,11 @@ final class Client_Model {
 	 *
 	 * @return string
 	 */
+
 	public function initials(): string {
-		$parts = explode( ' ', trim( $this->name ) );
-		$init  = '';
+		$parts = explode( ' ', trim( $this->client_name ) );
+
+		$init = '';
 
 		foreach ( array_slice( $parts, 0, 2 ) as $part ) {
 			$init .= strtoupper( mb_substr( $part, 0, 1 ) );
@@ -147,4 +156,5 @@ final class Client_Model {
 
 		return $init ?: '?';
 	}
+
 }

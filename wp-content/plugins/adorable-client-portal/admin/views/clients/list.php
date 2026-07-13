@@ -254,7 +254,7 @@ $sort_icon = static function ( string $col ) use ( $orderby, $order ): string {
 												type="checkbox"
 												class="acp-checkbox acp-row-check"
 												value="<?php echo esc_attr( (string) $client->id ); ?>"
-												aria-label="<?php echo esc_attr( sprintf( __( 'Select %s', 'adorable-client-portal' ), $client->name ) ); ?>"
+												aria-label="<?php echo esc_attr( sprintf( __( 'Select %s', 'adorable-client-portal' ), $client->client_name ) ); ?>"
 											>
 										</td>
 										<td class="acp-table__td">
@@ -264,7 +264,7 @@ $sort_icon = static function ( string $col ) use ( $orderby, $order ): string {
 												</div>
 												<div class="acp-client-info">
 													<a href="<?php echo esc_url( admin_url( 'admin.php?page=adorable-clients&action=view&id=' . $client->id ) ); ?>" class="acp-client-name">
-														<?php echo esc_html( $client->name ); ?>
+														<?php echo esc_html( $client->client_name ); ?>
 													</a>
 													<?php if ( '' !== $client->city ) : ?>
 														<span class="acp-client-location">
@@ -321,7 +321,7 @@ $sort_icon = static function ( string $col ) use ( $orderby, $order ): string {
 													type="button"
 													class="acp-btn acp-btn--icon acp-btn--danger-hover acp-delete-client"
 													data-id="<?php echo esc_attr( (string) $client->id ); ?>"
-													data-name="<?php echo esc_attr( $client->name ); ?>"
+													data-name="<?php echo esc_attr( $client->client_name ); ?>"
 													data-nonce="<?php echo esc_attr( $nonce ); ?>"
 													title="<?php esc_attr_e( 'Delete', 'adorable-client-portal' ); ?>"
 												>

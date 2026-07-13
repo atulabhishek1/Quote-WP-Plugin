@@ -74,6 +74,12 @@ final class Clients_Controller {
 		];
 
 		$clients     = $this->service->listClients( $args );
+		
+		// echo '<pre>';
+		// print_r( $clients );
+		// echo '</pre>';
+		// exit;
+
 		$total       = $this->service->countClients( $args );
 		$total_pages = (int) ceil( $total / $per_page );
 		$cities      = $this->service->getDistinctCities();
@@ -440,7 +446,7 @@ final class Clients_Controller {
 			'assigned_sales'    => (int) ( $post['assigned_salesperson'] ?? 0 ),
 			'assigned_designer' => (int) ( $post['assigned_designer'] ?? 0 ),
 			'status'            => sanitize_key( wp_unslash( $post['status'] ?? 'lead' ) ),
-			'tags'              => sanitize_text_field( wp_unslash( $post['tags'] ?? '' ) ),
+			// 'tags'              => sanitize_text_field( wp_unslash( $post['tags'] ?? '' ) ),
 			'notes'             => sanitize_textarea_field( wp_unslash( $post['notes'] ?? '' ) ),
 		];
 	}

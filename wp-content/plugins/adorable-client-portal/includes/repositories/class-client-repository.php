@@ -275,14 +275,14 @@ final class Client_Repository implements Client_Repository_Interface {
 				`c`.`client_code`,
 				`c`.`client_type`,
 				`c`.`company_name`,
-				`c`.`client_name` AS `name`,
+				`c`.`client_name`,
 				`c`.`primary_contact`,
 				`c`.`secondary_contact`,
 				`c`.`email`,
 				`c`.`alternate_email`,
 				`c`.`mobile`,
 				`c`.`alternate_mobile`,
-				`c`.`whatsapp_number` AS `whatsapp`,
+				`c`.`whatsapp_number`,
 				`c`.`gst_number`,
 				`c`.`pan_number`,
 				`c`.`billing_address`,
@@ -292,27 +292,16 @@ final class Client_Repository implements Client_Repository_Interface {
 				`c`.`country`,
 				`c`.`pincode`,
 				`c`.`lead_source`,
-				`c`.`assigned_sales` AS `assigned_salesperson`,
+				`c`.`assigned_sales`,
 				`c`.`assigned_designer`,
 				`c`.`status`,
 				`c`.`notes`,
 				`c`.`is_deleted`,
 				`c`.`created_at`,
 				`c`.`updated_at`,
-				COALESCE((
-					SELECT COUNT(*) FROM `{$this->projects_table}` `p`
-					WHERE `p`.`client_id` = `c`.`id`
-				), 0) AS `projects_count`,
-				COALESCE((
-					SELECT SUM(`py`.`amount`) FROM `{$this->payments_table}` `py`
-					INNER JOIN `{$this->projects_table}` `pj` ON `pj`.`id` = `py`.`project_id`
-					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
-				), 0) AS `total_revenue`,
-				COALESCE((
-					SELECT SUM(`py`.`amount`) FROM `{$this->payments_table}` `py`
-					INNER JOIN `{$this->projects_table}` `pj` ON `pj`.`id` = `py`.`project_id`
-					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
-				), 0) AS `pending_amount`
+				0 AS `projects_count`,
+				0 AS `total_revenue`,
+				0 AS `pending_amount`
 			FROM `{$this->table}` `c`
 			WHERE {$where_sql}
 			ORDER BY `{$orderby}` {$order}

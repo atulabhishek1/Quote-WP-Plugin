@@ -94,7 +94,7 @@ final class Clients_Repository implements Client_Repository_Interface {
 
 		if ( ! empty( $args['search'] ) ) {
 			$like      = '%' . $this->db->esc_like( $args['search'] ) . '%';
-			$where[]   = '(`c`.`name` LIKE %s OR `c`.`mobile` LIKE %s OR `c`.`email` LIKE %s OR `c`.`company_name` LIKE %s OR `c`.`gst_number` LIKE %s OR `c`.`pan_number` LIKE %s)';
+			$where[]   = '(`c`.`client_name` LIKE %s OR `c`.`mobile` LIKE %s OR `c`.`email` LIKE %s OR `c`.`company_name` LIKE %s OR `c`.`gst_number` LIKE %s OR `c`.`pan_number` LIKE %s)';
 			$params[]  = $like;
 			$params[]  = $like;
 			$params[]  = $like;
@@ -138,7 +138,7 @@ final class Clients_Repository implements Client_Repository_Interface {
 			$params[] = $args['date_to'];
 		}
 
-		$allowed_order  = [ 'name', 'company_name', 'mobile', 'email', 'status', 'created_at', 'updated_at', 'projects_count', 'total_revenue' ];
+		$allowed_order  = [ 'client_name', 'company_name', 'mobile', 'email', 'status', 'created_at', 'updated_at', 'projects_count', 'total_revenue' ];
 		$orderby        = in_array( $args['orderby'], $allowed_order, true ) ? $args['orderby'] : 'created_at';
 		$order          = 'ASC' === strtoupper( $args['order'] ) ? 'ASC' : 'DESC';
 		$per_page       = max( 1, (int) $args['per_page'] );
@@ -154,20 +154,9 @@ final class Clients_Repository implements Client_Repository_Interface {
 		$sql = "
 			SELECT
 				`c`.*,
-				COALESCE((
-					SELECT COUNT(*) FROM `{$projects_table}` `p`
-					WHERE `p`.`client_id` = `c`.`id`
-				), 0) AS `projects_count`,
-				COALESCE((
-					SELECT SUM(`py`.`amount`) FROM `{$payments_table}` `py`
-					INNER JOIN `{$projects_table}` `pj` ON `pj`.`id` = `py`.`project_id`
-					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'paid'
-				), 0) AS `total_revenue`,
-				COALESCE((
-					SELECT SUM(`py`.`amount`) FROM `{$payments_table}` `py`
-					INNER JOIN `{$projects_table}` `pj` ON `pj`.`id` = `py`.`project_id`
-					WHERE `pj`.`client_id` = `c`.`id` AND `py`.`status` = 'pending'
-				), 0) AS `pending_amount`
+				0 AS `projects_count`,
+				0 AS `total_revenue`,
+				0 AS `pending_amount`
 			FROM `{$this->table}` `c`
 			WHERE {$where_sql}
 			ORDER BY `{$orderby}` {$order}
@@ -178,7 +167,30 @@ final class Clients_Repository implements Client_Repository_Interface {
 		$params[] = $offset;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
-		$rows = $this->db->get_results( $this->db->prepare( $sql, ...$params ), ARRAY_A );
+		$query = $this->db->prepare( $sql, ...$params );
+
+		error_log( 'ACP QUERY: ' . $query );
+
+		$rows = $this->db->get_results(
+			$query,
+			ARRAY_A
+		);
+
+		error_log( 'ACP ROWS: ' . print_r( $rows, true ) );
+		error_log( 'ACP DB ERROR: ' . $this->db->last_error );
+				
+		// if ( $this->db->last_error ) {
+		//   error_log( 'ACP GET CLIENTS ERRO*: ' . $this->db->last_error );
+		// }
+		
+		
+		// error_log(
+		// 	'AC* GET CLIENTS SQL: ' .
+		// 	$this->d*->prepare( $sql, ...$params )
+		// );
+		
+
+
 
 		if ( empty( $rows ) ) {
 			return [];
@@ -216,7 +228,7 @@ final class Clients_Repository implements Client_Repository_Interface {
 
 		if ( ! empty( $args['search'] ) ) {
 			$like     = '%' . $this->db->esc_like( $args['search'] ) . '%';
-			$where[]  = '(`name` LIKE %s OR `mobile` LIKE %s OR `email` LIKE %s OR `company_name` LIKE %s OR `gst_number` LIKE %s OR `pan_number` LIKE %s)';
+			$where[]  = '(`client_name` LIKE %s OR `mobile` LIKE %s OR `email` LIKE %s OR `company_name` LIKE %s OR `gst_number` LIKE %s OR `pan_number` LIKE %s)';
 			$params[] = $like;
 			$params[] = $like;
 			$params[] = $like;
@@ -477,8 +489,9 @@ final class Clients_Repository implements Client_Repository_Interface {
 	 *
 	 * @param array<string,mixed> $data Sanitised column => value pairs.
 	 * @return int|false New client ID or false on failure.
-	 */
+		*/
 	public function insert( array $data ): int|false {
+
 		$data['created_at'] = current_time( 'mysql' );
 		$data['updated_at'] = current_time( 'mysql' );
 
@@ -486,10 +499,16 @@ final class Clients_Repository implements Client_Repository_Interface {
 			$data['is_deleted'] = 0;
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$result = $this->db->insert( $this->table, $data );
 
-		return false !== $result ? (int) $this->db->insert_id : false;
+		if ( false === $result ) {
+			error_log( 'ACP INSERT ERROR: ' . $this->db->last_error );
+			error_log( 'ACP INSERT DATA: ' . wp_json_encode( $data ) );
+		}
+
+		return false !== $result
+			? (int) $this->db->insert_id
+			: false;
 	}
 
 	/**
